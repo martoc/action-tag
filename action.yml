@@ -1,0 +1,36 @@
+name: 'Tag repository using semantic versioning based on the commit message'
+description: 'Analysis of commit messages based on conventional commits and tag the repository based on semantic versioning'
+author: martoc
+runs:
+  using: 'composite'
+  steps:
+    - name: Tag repository
+      shell: bash
+      run: |
+        GITHUB_TOKEN=${{ github.token }}
+        GITHUB_REPOSITORY=${{ github.repository }}
+        mkdir -p .cdf || true
+        curl -L \
+            -H "Accept: application/octet-stream" \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            -o .cdf/semver \
+            https://api.github.com/repos/martoc/semver/releases/assets/150340722
+        chmod 755 .cdf/semver
+        TAG_VERSION=$(.cdf/semver calculate)
+        TAG_NAME="v$TAG_VERSION"
+        RESPONSE=$(curl -sSL -H "Authorization: token $GITHUB_TOKEN" -H "Content-Type: application/json" -X POST -d "{\"tag\":\"$TAG_NAME\",\"message\":\"$TAG_NAME\",\"object\":\"$(git rev-parse HEAD)\",\"type\":\"commit\"}" "https://api.github.com/repos/$GITHUB_REPOSITORY/git/tags")
+        TAG_SHA=$(echo "$RESPONSE" | jq -r '.sha')
+        if [ "$TAG_SHA" == "" ]; then
+          echo "RESPONSE=$RESPONSE"
+          echo "Failed to create tag"
+          exit 1
+        fi
+        RESPONSE=$(curl -sSL -H "Authorization: token $GITHUB_TOKEN" -H "Content-Type: application/json" -X POST -d "{\"ref\":\"refs/tags/$TAG_NAME\",\"sha\":\"$TAG_SHA\"}" "https://api.github.com/repos/$GITHUB_REPOSITORY/git/refs")
+        REF=$(echo "$RESPONSE" | jq -r '.ref')
+        if [ "$REF" = "" ]; then
+          echo "RESPONSE=$RESPONSE"
+          echo "Failed to create ref"
+          exit 1
+        fi
+        echo "TAG_VERSION=$TAG_VERSION" >> "$GITHUB_ENV"
+        echo "TAG_NAME=$TAG_NAME" >> "$GITHUB_ENV"
