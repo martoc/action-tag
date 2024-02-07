@@ -1,5 +1,8 @@
+---
 name: 'Tag repository using semantic versioning based on the commit message'
-description: 'Analysis of commit messages based on conventional commits and tag the repository based on semantic versioning'
+description: |
+  This action tags the repository using semantic
+  versioning based on the commit message.
 author: martoc
 runs:
   using: 'composite'
@@ -18,14 +21,23 @@ runs:
         chmod 755 .cdf/semver
         TAG_VERSION=$(.cdf/semver calculate)
         TAG_NAME="v$TAG_VERSION"
-        RESPONSE=$(curl -sSL -H "Authorization: token $GITHUB_TOKEN" -H "Content-Type: application/json" -X POST -d "{\"tag\":\"$TAG_NAME\",\"message\":\"$TAG_NAME\",\"object\":\"$(git rev-parse HEAD)\",\"type\":\"commit\"}" "https://api.github.com/repos/$GITHUB_REPOSITORY/git/tags")
+        GIT_REF=$(git rev-parse HEAD)
+        RESPONSE=$(curl -sSL -H "Authorization: token $GITHUB_TOKEN" \
+          -H "Content-Type: application/json" \
+          -X POST \
+          -d "{\"tag\":\"$TAG_NAME\",\"message\":\"$TAG_NAME\",\"object\":\"$GIT_REF\",\"type\":\"commit\"}" \
+          "https://api.github.com/repos/$GITHUB_REPOSITORY/git/tags")
         TAG_SHA=$(echo "$RESPONSE" | jq -r '.sha')
         if [ "$TAG_SHA" == "" ]; then
           echo "RESPONSE=$RESPONSE"
           echo "Failed to create tag"
           exit 1
         fi
-        RESPONSE=$(curl -sSL -H "Authorization: token $GITHUB_TOKEN" -H "Content-Type: application/json" -X POST -d "{\"ref\":\"refs/tags/$TAG_NAME\",\"sha\":\"$TAG_SHA\"}" "https://api.github.com/repos/$GITHUB_REPOSITORY/git/refs")
+        RESPONSE=$(curl -sSL -H "Authorization: token $GITHUB_TOKEN" \
+          -H "Content-Type: application/json" \
+          -X POST \
+          -d "{\"ref\":\"refs/tags/$TAG_NAME\",\"sha\":\"$TAG_SHA\"}" \
+          "https://api.github.com/repos/$GITHUB_REPOSITORY/git/refs")
         REF=$(echo "$RESPONSE" | jq -r '.ref')
         if [ "$REF" = "" ]; then
           echo "RESPONSE=$RESPONSE"
@@ -34,3 +46,4 @@ runs:
         fi
         echo "TAG_VERSION=$TAG_VERSION" >> "$GITHUB_ENV"
         echo "TAG_NAME=$TAG_NAME" >> "$GITHUB_ENV"
+        echo "TAG_SHA=$TAG_SHA" >> "$GITHUB_ENV"
