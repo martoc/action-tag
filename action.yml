@@ -19,7 +19,9 @@ runs:
             -o .cdf/semver \
             https://api.github.com/repos/martoc/semver/releases/assets/150697490
         chmod 755 .cdf/semver
-        TAG_VERSION=$(.cdf/semver calculate)
+        ls -l
+        pwd
+        TAG_VERSION=$(.cdf/semver calculate --path .)
         TAG_NAME="v$TAG_VERSION"
         GIT_REF=$(git rev-parse HEAD)
         RESPONSE=$(curl -sSL -H "Authorization: token $GITHUB_TOKEN" \
