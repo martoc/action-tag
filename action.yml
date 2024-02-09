@@ -22,9 +22,6 @@ runs:
         TAG_VERSION=$(.cdf/semver calculate --path $PWD)
         TAG_NAME="v$TAG_VERSION"
         GIT_REF=$(git rev-parse HEAD)
-        echo "TAG_VERSION=$TAG_VERSION""
-        echo "TAG_NAME=$TAG_NAME"
-        echo "GIT_REF=$GIT_REF"
         RESPONSE=$(curl -sSL -H "Authorization: token $GITHUB_TOKEN" \
           -H "Content-Type: application/json" \
           -X POST \
@@ -47,7 +44,7 @@ runs:
           echo "Failed to create ref"
           exit 1
         fi
-        echo "TAG_VERSION=$TAG_VERSION""
+        echo "TAG_VERSION=$TAG_VERSION"
         echo "TAG_NAME=$TAG_NAME"
         echo "TAG_SHA=$TAG_SHA"
         echo "TAG_VERSION=$TAG_VERSION" >> "$GITHUB_ENV"
