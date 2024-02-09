@@ -20,6 +20,7 @@ runs:
             https://api.github.com/repos/martoc/semver/releases/assets/150717342
         chmod 755 .cdf/semver
         TAG_VERSION=$(.cdf/semver calculate --path $PWD)
+        cat semver.log
         TAG_NAME="v$TAG_VERSION"
         GIT_REF=$(git rev-parse HEAD)
         RESPONSE=$(curl -sSL -H "Authorization: token $GITHUB_TOKEN" \
