@@ -12,17 +12,15 @@ runs:
       run: |
         GITHUB_TOKEN=${{ github.token }}
         GITHUB_REPOSITORY=${{ github.repository }}
-        # mkdir -p .cdf || true
-        # curl -L \
-        #     -H "Accept: application/octet-stream" \
-        #     -H "Authorization: token $GITHUB_TOKEN" \
-        #     -o .cdf/semver \
-        #     https://api.github.com/repos/martoc/semver/releases/assets/150697490
-        # chmod 755 .cdf/semver
-        # TAG_VERSION=$(.cdf/semver calculate --path $PWD)
-        # TAG_NAME="v$TAG_VERSION"
-        TAG_VERSION=${GITHUB_SHA::7}
-        TAG_NAME="$TAG_VERSION"
+        mkdir -p .cdf || true
+        curl -L \
+            -H "Accept: application/octet-stream" \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            -o .cdf/semver \
+            https://api.github.com/repos/martoc/semver/releases/assets/150717342
+        chmod 755 .cdf/semver
+        TAG_VERSION=$(.cdf/semver calculate --path $PWD)
+        TAG_NAME="v$TAG_VERSION"
         GIT_REF=$(git rev-parse HEAD)
         RESPONSE=$(curl -sSL -H "Authorization: token $GITHUB_TOKEN" \
           -H "Content-Type: application/json" \
