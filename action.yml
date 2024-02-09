@@ -44,6 +44,9 @@ runs:
           echo "Failed to create ref"
           exit 1
         fi
+        echo "TAG_VERSION=$TAG_VERSION""
+        echo "TAG_NAME=$TAG_NAME"
+        echo "TAG_SHA=$TAG_SHA"
         echo "TAG_VERSION=$TAG_VERSION" >> "$GITHUB_ENV"
         echo "TAG_NAME=$TAG_NAME" >> "$GITHUB_ENV"
         echo "TAG_SHA=$TAG_SHA" >> "$GITHUB_ENV"
