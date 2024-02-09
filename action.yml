@@ -17,7 +17,7 @@ runs:
             -H "Accept: application/octet-stream" \
             -H "Authorization: token $GITHUB_TOKEN" \
             -o .cdf/semver \
-            https://api.github.com/repos/martoc/semver/releases/assets/150695584
+            https://api.github.com/repos/martoc/semver/releases/assets/150697490
         chmod 755 .cdf/semver
         TAG_VERSION=$(.cdf/semver calculate)
         TAG_NAME="v$TAG_VERSION"
