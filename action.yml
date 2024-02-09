@@ -12,6 +12,7 @@ runs:
       run: |
         GITHUB_TOKEN=${{ github.token }}
         GITHUB_REPOSITORY=${{ github.repository }}
+
         mkdir -p .cdf || true
         curl -L \
             -H "Accept: application/octet-stream" \
@@ -19,32 +20,11 @@ runs:
             -o .cdf/semver \
             https://api.github.com/repos/martoc/semver/releases/assets/150737147
         chmod 755 .cdf/semver
+
         TAG_VERSION=$(.cdf/semver calculate --path $PWD)
         TAG_NAME="v$TAG_VERSION"
         TAG_SHA=$(git rev-parse HEAD)
-        # GIT_REF=$(git rev-parse HEAD)
-        # RESPONSE=$(curl -sSL -H "Authorization: token $GITHUB_TOKEN" \
-        #   -H "Content-Type: application/json" \
-        #   -X POST \
-        #   -d "{\"tag\":\"$TAG_NAME\",\"message\":\"$TAG_NAME\",\"object\":\"$GIT_REF\",\"type\":\"commit\"}" \
-        #   "https://api.github.com/repos/$GITHUB_REPOSITORY/git/tags")
-        # TAG_SHA=$(echo "$RESPONSE" | jq -r '.sha')
-        # if [ "$TAG_SHA" == "" ]; then
-        #   echo "RESPONSE=$RESPONSE"
-        #   echo "Failed to create tag"
-        #   exit 1
-        # fi
-        # RESPONSE=$(curl -sSL -H "Authorization: token $GITHUB_TOKEN" \
-        #   -H "Content-Type: application/json" \
-        #   -X POST \
-        #   -d "{\"ref\":\"refs/tags/$TAG_NAME\",\"sha\":\"$TAG_SHA\"}" \
-        #   "https://api.github.com/repos/$GITHUB_REPOSITORY/git/refs")
-        # REF=$(echo "$RESPONSE" | jq -r '.ref')
-        # if [ "$REF" = "" ]; then
-        #   echo "RESPONSE=$RESPONSE"
-        #   echo "Failed to create ref"
-        #   exit 1
-        # fi
+
         echo "TAG_VERSION=$TAG_VERSION"
         echo "TAG_NAME=$TAG_NAME"
         echo "TAG_SHA=$TAG_SHA"
