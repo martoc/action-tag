@@ -21,6 +21,7 @@ runs:
         chmod 755 .cdf/semver
         ls -l
         pwd
+        cat .cdf/semver
         TAG_VERSION=$(.cdf/semver calculate --path .)
         TAG_NAME="v$TAG_VERSION"
         GIT_REF=$(git rev-parse HEAD)
