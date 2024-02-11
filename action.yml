@@ -15,7 +15,7 @@ runs:
         mkdir -p .cdf || true
         curl -L \
             -H "Accept: application/octet-stream" \
-            -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Authorization: token $PERSONAL_GITHUB_TOKEN" \
             -o .cdf/semver \
             https://api.github.com/repos/martoc/semver/releases/assets/150737147
         chmod 755 .cdf/semver
