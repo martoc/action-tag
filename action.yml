@@ -10,13 +10,12 @@ runs:
     - name: Tag repository
       shell: bash
       run: |
-        PERSONAL_GITHUB_TOKEN=$PERSONAL_GITHUB_TOKEN}
         GITHUB_REPOSITORY=${{ github.repository }}
 
         mkdir -p .cdf || true
         curl -L \
             -H "Accept: application/octet-stream" \
-            -H "Authorization: token $PERSONAL_GITHUB_TOKEN" \
+            -H "Authorization: token $GITHUB_TOKEN" \
             -o .cdf/semver \
             https://api.github.com/repos/martoc/semver/releases/assets/150737147
         chmod 755 .cdf/semver
