@@ -14,12 +14,7 @@ runs:
         if [ "${{ github.event_name }}" == "pull_request" ]; then
           echo "Skipping tag creation for pull requests."
           TAG_VERSION=${TAG_SHA:0:7}
-          TAG_FLOATING_VERSION_MAJOR=$TAG_VERSION
-          TAG_FLOATING_VERSION_MINOR=$TAG_VERSION
-
           TAG_NAME="$TAG_VERSION"
-          TAG_FLOATING_MAJOR_NAME="$TAG_VERSION"
-          TAG_FLOATING_MINOR_NAME="$TAG_VERSION"
         else
           OUTPUT=$(docker run -w /workdir -v $PWD:/workdir martoc/semver:1.2.0 calculate --path /workdir --add-floating-tags)
           TAG_VERSION=$(echo $OUTPUT | jq -r '.next_version')
