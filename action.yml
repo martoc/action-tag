@@ -3,6 +3,11 @@ name: 'Tag repository using semantic versioning based on the commit message'
 description: |
   This action tags the repository using semantic
   versioning based on the commit message.
+inputs:
+  skip-push:
+    description: 'Skip tag creation for pull requests'
+    required: false
+    default: 'false'
 author: martoc
 runs:
   using: 'composite'
@@ -25,9 +30,11 @@ runs:
           TAG_FLOATING_MAJOR_NAME="v$TAG_FLOATING_VERSION_MAJOR"
           TAG_FLOATING_MINOR_NAME="v$TAG_FLOATING_VERSION_MINOR"
 
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git push --tags --force
+          if [ "${{ inputs.skip-push }}" == "true" ]; then
+            git config user.name github-actions
+            git config user.email github-actions@github.com
+            git push --tags --force
+          fi
         fi
 
         echo "TAG_VERSION=$TAG_VERSION"
