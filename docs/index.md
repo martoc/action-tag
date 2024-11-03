@@ -2,6 +2,7 @@ Calculates a new checking on the commit logs, uses the commit message to calcula
 
 # Table of Content
 
-* [Introduction](./INTRODUCTION.md)
 * [Code Style](./CODESTYLE.md)
+* [Usage](./USAGE.md)
+
 
