@@ -88,4 +88,5 @@ runs:
     - shell: sh
       run: |
         cat $GITHUB_WORKSPACE/tags >> $GITHUB_ENV
+        rm -rf $GITHUB_WORKSPACE/tags
       if: ${{ inputs.execute  == 'load' }}
