@@ -68,18 +68,18 @@ runs:
         echo "TAG_FLOATING_MINOR_NAME=$TAG_FLOATING_MINOR_NAME" >> "$GITHUB_OUTPUT"
         echo "TAG_SHA=$TAG_SHA" >> "$GITHUB_OUTPUT"
 
-        echo "TAG_VERSION=$TAG_VERSION" > $GITHUB_WORKSPACE/tags
-        echo "TAG_FLOATING_VERSION_MAJOR=$TAG_FLOATING_VERSION_MAJOR" >> $GITHUB_WORKSPACE/tags
-        echo "TAG_FLOATING_VERSION_MINOR=$TAG_FLOATING_VERSION_MINOR" >> $GITHUB_WORKSPACE/tags
-        echo "TAG_NAME=$TAG_NAME" >> $GITHUB_WORKSPACE/tags
-        echo "TAG_FLOATING_MAJOR_NAME=$TAG_FLOATING_MAJOR_NAME" >> $GITHUB_WORKSPACE/tags
-        echo "TAG_FLOATING_MINOR_NAME=$TAG_FLOATING_MINOR_NAME" >> $GITHUB_WORKSPACE/tags
-        echo "TAG_SHA=$TAG_SHA" >> $GITHUB_WORKSPACE/tags
+        echo "TAG_VERSION=$TAG_VERSION" > ~/tags
+        echo "TAG_FLOATING_VERSION_MAJOR=$TAG_FLOATING_VERSION_MAJOR" >> ~/tags
+        echo "TAG_FLOATING_VERSION_MINOR=$TAG_FLOATING_VERSION_MINOR" >> ~/tags
+        echo "TAG_NAME=$TAG_NAME" >> ~/tags
+        echo "TAG_FLOATING_MAJOR_NAME=$TAG_FLOATING_MAJOR_NAME" >> ~/tags
+        echo "TAG_FLOATING_MINOR_NAME=$TAG_FLOATING_MINOR_NAME" >> ~/tags
+        echo "TAG_SHA=$TAG_SHA" >> ~/tags
       if: ${{ inputs.execute  == 'tag' }}
     - uses: actions/upload-artifact@v4
       with:
         name: tags
-        path: ${{ env.GITHUB_WORKSPACE }}/tags
+        path: ~/tags
       if: ${{ inputs.execute  == 'tag' }}
     - uses: actions/download-artifact@v4
       with:
