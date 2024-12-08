@@ -75,6 +75,9 @@ runs:
         echo "TAG_FLOATING_MAJOR_NAME=$TAG_FLOATING_MAJOR_NAME" >> ~/tags
         echo "TAG_FLOATING_MINOR_NAME=$TAG_FLOATING_MINOR_NAME" >> ~/tags
         echo "TAG_SHA=$TAG_SHA" >> ~/tags
+
+        echo "::debug::Version: $TAG_VERSION"
+
       if: ${{ inputs.execute  == 'tag' }}
     - uses: actions/upload-artifact@v4
       with:
