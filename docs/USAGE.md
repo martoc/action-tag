@@ -17,7 +17,7 @@ making it easier to maintain an organised and predictable version history.
 * `MINOR` version when a new feature is added that is backward-compatible.
 * `PATCH` version for backward-compatible bug fixes.
 
-## Basic Usage
+## Basic usage
 
 Below is an example of how to use martoc/action-tag in your GitHub Actions workflow:
 
@@ -83,7 +83,7 @@ jobs:
 * **skip-push:** true prevents the new tag from being pushed to the repository,
 making the action only calculate the tag version without updating the repository.
 
-## Configuration Options
+## Configuration options
 
 * **skip-push:** (Optional) When set to true, the action calculates the version tag but does not push it to the repository.
 Default is `false`.
