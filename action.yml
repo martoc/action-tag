@@ -60,6 +60,7 @@ runs:
         echo "TAG_FLOATING_MINOR_NAME=$TAG_FLOATING_MINOR_NAME" >> "$GITHUB_ENV"
         echo "TAG_SHA=$TAG_SHA" >> "$GITHUB_ENV"
 
+        echo "version=$TAG_VERSION" >> "$GITHUB_OUTPUT"
         echo "TAG_VERSION=$TAG_VERSION" >> "$GITHUB_OUTPUT"
         echo "TAG_FLOATING_VERSION_MAJOR=$TAG_FLOATING_VERSION_MAJOR" >> "$GITHUB_OUTPUT"
         echo "TAG_FLOATING_VERSION_MINOR=$TAG_FLOATING_VERSION_MINOR" >> "$GITHUB_OUTPUT"
@@ -93,3 +94,6 @@ runs:
         cat $GITHUB_WORKSPACE/tags >> $GITHUB_ENV
         rm -rf $GITHUB_WORKSPACE/tags
       if: ${{ inputs.execute  == 'load' }}
+outputs:
+  version:
+    description: Tagged version
