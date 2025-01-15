@@ -22,9 +22,9 @@ runs:
       run: |
         TAG_SHA=$(git rev-parse HEAD)
         if [ "${{ github.event_name }}" == "pull_request" ]; then
-          echo "Skipping tag creation for pull requests."
-          TAG_VERSION=${TAG_SHA:0:7}
-          TAG_NAME="$TAG_VERSION"
+          echo "Skipping tag creation for pull requests, calculating release candidate tag."
+          TAG_VERSION=0.0.0-rc.${TAG_SHA:0:7}
+          TAG_NAME="v$TAG_VERSION"
         else
           OUTPUT=$(docker run -w /workdir -v $PWD:/workdir martoc/semver:1.5.5 calculate --path /workdir --add-floating-tags)
           TAG_VERSION=$(echo $OUTPUT | jq -r '.next_version')
