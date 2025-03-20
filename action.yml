@@ -21,7 +21,7 @@ runs:
       shell: bash
       run: |
         git fetch --tags
-        TAG_SHA=$(git rev-parse HEAD)
+        TAG_SHA=$GITHUB_SHA
         if [ "${{ github.event_name }}" == "pull_request" ]; then
           echo "Skipping tag creation for pull requests, calculating release candidate tag."
           TAG_VERSION=0.0.0-rc.${TAG_SHA:0:7}
