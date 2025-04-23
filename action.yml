@@ -12,6 +12,10 @@ inputs:
     description: "The action to perform tag or load"
     required: false
     default: "tag"
+  format:
+    description: "The format of the tag"
+    required: false
+    default: "semver"
 author: martoc
 runs:
   using: "composite"
@@ -24,7 +28,12 @@ runs:
         if [ "${{ github.event_name }}" == "pull_request" ]; then
           echo "Skipping tag creation for pull requests, calculating release candidate tag."
           TAG_SHA=${{ github.event.pull_request.head.sha }}
-          TAG_VERSION=0.0.0-rc.${TAG_SHA:0:7}
+          if [ ${{ inputs.format }} == "PEP440" ]; then
+            TAG_VERSION=0.0.0-rc.${GITHUB_RUN_ID}
+          else
+            TAG_VERSION=0.0.0-rc.${TAG_SHA:0:7}
+          fi
+
           TAG_NAME="v$TAG_VERSION"
         else
           TAG_SHA=$GITHUB_SHA
@@ -96,6 +105,3 @@ runs:
         cat $GITHUB_WORKSPACE/tags >> $GITHUB_ENV
         rm -rf $GITHUB_WORKSPACE/tags
       if: ${{ inputs.execute  == 'load' }}
-outputs:
-  version:
-    description: Tagged version

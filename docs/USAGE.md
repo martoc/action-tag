@@ -1,29 +1,45 @@
-# Usage 
+# Tag Repository Action
 
-This USAGE.md file describes how to utilise the `martoc/action-tag` GitHub Action, 
-which automatically tags your repository based on the commit messages, 
-following the Conventional Commits specification.
+This GitHub Action tags a repository using semantic versioning based on the commit message. It supports tagging with different formats and provides options for skipping tag creation or loading previously created tags.
 
-## Overview
+## Inputs
 
-The `martoc/action-tag action` is used to calculate and apply semantic version tags to your GitHub repository. 
-This versioning follows the Conventional Commits specification, 
-making it easier to maintain an organised and predictable version history.
+| Name       | Description                                | Required | Default |
+|------------|--------------------------------------------|----------|---------|
+| skip-push  | Skip tag creation for pull requests.       | false    | false   |
+| execute    | The action to perform: `tag` or `load`.    | false    | tag     |
+| format     | The format of the tag (`semver` or `PEP440`). | false | semver  |
 
-## Prerequisites
+## Outputs
 
-* Ensure your project utilises the Conventional Commits format. The versioning follows the rules of semantic versioning, incrementing:
-* `MAJOR` version when a breaking change is introduced.
-* `MINOR` version when a new feature is added that is backward-compatible.
-* `PATCH` version for backward-compatible bug fixes.
+| Name    | Description         |
+|---------|---------------------|
+| version | The tagged version. |
 
-## Basic usage
+## Steps
 
-Below is an example of how to use martoc/action-tag in your GitHub Actions workflow:
+### 1. Tag Repository
+- Fetches existing tags using `git fetch --tags`.
+- **If the event is a pull request:**
+  - Skips tag creation and calculates a release candidate tag.
+  - Uses the PEP440 format or a short SHA for the tag version.
+- **Otherwise:**
+  - Calculates the next semantic version using the `martoc/semver:1.5.5` Docker image.
+  - Creates floating tags for major and minor versions.
+  - Pushes tags unless `skip-push` is set to `true`.
+
+### 2. Upload Tags
+- Uploads the generated tags as an artifact if `execute` is set to `tag`.
+
+### 3. Download Tags
+- Downloads previously created tags as an artifact if `execute` is set to `load`.
+
+### 4. Load Tags into Environment
+- Loads the downloaded tags into the GitHub Actions environment if `execute` is set to `load`.
+
+## Example Usagename: 
 
 ```yaml
-name: Tagging Workflow
-
 on:
   push:
     branches:
@@ -33,70 +49,17 @@ jobs:
   tag:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 10
-          fetch-tags: true
 
-      - name: Tag
-        uses: martoc/action-tag@v0
+      - name: Tag repository
+        uses: martoc/action-tag@v1
+        with:
+          skip-push: false
+          execute: tag
+          format: semver
 ```
+## Notes
 
-### Explanation
-
-* The Tagging Workflow is triggered on every push to the main branch.
-* The actions/checkout step ensures the repository’s content is checked out so the action can access the commit history.
-* The martoc/action-tag@v0 step calculates the semantic version based on the latest commit message and prepares to apply a new tag.
-
-## Optional: Skip Pushing the Tag to the Repository
-
-By default, the action is configured to calculate the semantic version and push the tag to the repository. However, 
-you can prevent the action from updating the repository by using the skip-push option.
-
-Usage with skip-push
-```yaml
-name: Tagging Workflow (Skip Push)
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  tag:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 10
-          fetch-tags: true
-
-      - name: Tag
-        uses: martoc/action-tag@v0
-        with:
-          skip-push: true
-```
-### Explanation
-
-* **skip-push:** true prevents the new tag from being pushed to the repository,
-making the action only calculate the tag version without updating the repository.
-
-## Configuration options
-
-* **skip-push:** (Optional) When set to true, the action calculates the version tag but does not push it to the repository.
-Default is `false`.
-
-## Troubleshooting
-
-If the action does not behave as expected:
-
-* Verify that your commit messages follow the Conventional Commits format.
-* Check the action logs for detailed error information.
-* Ensure that skip-push is set correctly based on whether you want to push tags or not.
-
-## Additional Resources
-
-* [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
-* [Semantic Versioning](https://semver.org/)
+The action uses the `GITHUB_RUN_ID` to append a unique build ID to the tag when using the `PEP440` format or for release candidate tags.
+Floating tags (e.g., v1, v1.2) are created for major and minor versions for easier reference.
