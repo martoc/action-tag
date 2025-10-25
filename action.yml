@@ -91,7 +91,7 @@ runs:
         echo "::debug::Version: $TAG_VERSION"
 
       if: ${{ inputs.execute  == 'tag' }}
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v5
       with:
         name: tags
         path: ~/tags
