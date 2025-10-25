@@ -96,7 +96,7 @@ runs:
         name: tags
         path: ~/tags
       if: ${{ inputs.execute  == 'tag' }}
-    - uses: actions/download-artifact@v4
+    - uses: actions/download-artifact@v6
       with:
         name: tags
       if: ${{ inputs.execute  == 'load' }}
