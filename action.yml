@@ -16,6 +16,24 @@ inputs:
     description: "The format of the tag"
     required: false
     default: "semver"
+
+outputs:
+  version:
+    description: "Alias for TAG_VERSION"
+    value: ${{ steps.tag.outputs.version }}
+  TAG_VERSION:
+    description: "The semantic version tag (without 'v' prefix)"
+    value: ${{ steps.tag.outputs.TAG_VERSION }}
+  TAG_NAME:
+    description: "The full tag name (with 'v' prefix)"
+    value: ${{ steps.tag.outputs.TAG_NAME }}
+  TAG_FLOATING_VERSION_MAJOR:
+    description: "The floating major version"
+    value: ${{ steps.tag.outputs.TAG_FLOATING_VERSION_MAJOR }}
+  TAG_FLOATING_VERSION_MINOR:
+    description: "The floating minor version"
+    value: ${{ steps.tag.outputs.TAG_FLOATING_VERSION_MINOR }}
+
 author: martoc
 runs:
   using: "composite"
