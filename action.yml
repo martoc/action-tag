@@ -113,6 +113,7 @@ runs:
       with:
         name: tags
         path: ~/tags
+        overwrite: true
       if: ${{ inputs.execute  == 'tag' }}
     - uses: actions/download-artifact@v4
       with:
