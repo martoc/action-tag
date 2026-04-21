@@ -37,6 +37,7 @@ A GitHub Action that calculates and applies semantic version tags to repositorie
 | `skip-push` | Skip pushing tags to remote | No | `false` |
 | `execute` | Action to perform: `tag` or `load` | No | `tag` |
 | `format` | Tag format: `semver` or `PEP440` | No | `semver` |
+| `append-build-id` | Append the GitHub Actions run ID as a build identifier (e.g. `1.2.3-build.123456789`). Floating major/minor tags are not created when enabled. | No | `false` |
 
 ## Outputs
 

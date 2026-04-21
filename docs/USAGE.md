@@ -4,11 +4,12 @@ This GitHub Action tags a repository using semantic versioning based on the comm
 
 ## Inputs
 
-| Name       | Description                                | Required | Default |
-|------------|--------------------------------------------|----------|---------|
-| skip-push  | Skip tag creation for pull requests.       | false    | false   |
-| execute    | The action to perform: `tag` or `load`.    | false    | tag     |
-| format     | The format of the tag (`semver` or `PEP440`). | false | semver  |
+| Name            | Description                                                                                                          | Required | Default |
+|-----------------|----------------------------------------------------------------------------------------------------------------------|----------|---------|
+| skip-push       | Skip tag creation for pull requests.                                                                                 | false    | false   |
+| execute         | The action to perform: `tag` or `load`.                                                                              | false    | tag     |
+| format          | The format of the tag (`semver` or `PEP440`).                                                                        | false    | semver  |
+| append-build-id | Append the GitHub Actions run ID as a build identifier (e.g. `1.2.3-build.123456789`). Disables floating major/minor tags. | false    | false   |
 
 ## Outputs
 
@@ -26,6 +27,7 @@ This GitHub Action tags a repository using semantic versioning based on the comm
 - **Otherwise:**
   - Calculates the next semantic version using the `martoc/semver:1.5.5` Docker image.
   - Creates floating tags for major and minor versions.
+  - When `append-build-id` is `true`, appends `-build.${GITHUB_RUN_ID}` to the calculated version (producing e.g. `1.2.3-build.123456789`) and only pushes that single tag (no floating major/minor tags).
   - Pushes tags unless `skip-push` is set to `true`.
 
 ### 2. Upload Tags
@@ -59,7 +61,19 @@ jobs:
           execute: tag
           format: semver
 ```
+
+### Pin a build to its GitHub Actions run
+
+```yaml
+      - name: Tag repository with build ID
+        uses: martoc/action-tag@v1
+        with:
+          append-build-id: true
+```
+
+Produces a tag like `v1.2.3-build.123456789`, where `123456789` is the GitHub Actions run ID.
+
 ## Notes
 
-The action uses the `GITHUB_RUN_ID` to append a unique build ID to the tag when using the `PEP440` format or for release candidate tags.
-Floating tags (e.g., v1, v1.2) are created for major and minor versions for easier reference.
+The action uses the `GITHUB_RUN_ID` to append a unique build ID to the tag when using the `PEP440` format, for release candidate tags, or when `append-build-id` is `true`.
+Floating tags (e.g., v1, v1.2) are created for major and minor versions for easier reference, except when `append-build-id` is `true`.
