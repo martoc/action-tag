@@ -38,7 +38,7 @@ author: martoc
 runs:
   using: "composite"
   steps:
-    - name: Tag repository
+    - name: Tag
       id: tag
       shell: bash
       run: |
