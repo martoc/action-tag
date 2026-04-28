@@ -43,6 +43,7 @@ runs:
       shell: bash
       run: |
         sudo chmod -R 0777 .git || echo "Invalid sudo permissions"
+        ls -l .git/packed-refs || echo ".git/packed-refs doesn't exists"
         echo "Fixed github permissions"
         git fetch --tags
         if [ "${{ github.event_name }}" == "pull_request" ]; then
