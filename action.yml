@@ -42,7 +42,8 @@ runs:
       id: tag
       shell: bash
       run: |
-        sudo chmod -R a+rX .git || echo "Invalid sudo permissions"
+        sudo chmod -R 0777 .git || echo "Invalid sudo permissions"
+        echo "Fixed github permissions"
         git fetch --tags
         if [ "${{ github.event_name }}" == "pull_request" ]; then
           echo "Skipping tag creation for pull requests, calculating release candidate tag."
