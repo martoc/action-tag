@@ -15,5 +15,5 @@ jobs:
   release:
     permissions:
       contents: write
-    uses: martoc/workflow-github-actions/.github/workflows/publish.yml@v1
+    uses: martoc/workflow-github-actions/.github/workflows/publish.yml@5eb7821ce4e92cf10075d74bb33fcdd85e853063
     secrets: inherit
