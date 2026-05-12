@@ -109,12 +109,12 @@ runs:
         echo "::debug::Version: $TAG_VERSION"
 
       if: ${{ inputs.execute  == 'tag' }}
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v7
       with:
         name: tags
         path: ~/tags
       if: ${{ inputs.execute  == 'tag' }}
-    - uses: actions/download-artifact@v4
+    - uses: actions/download-artifact@v8
       with:
         name: tags
       if: ${{ inputs.execute  == 'load' }}

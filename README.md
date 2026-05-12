@@ -16,7 +16,7 @@ A GitHub Action that calculates and applies semantic version tags to repositorie
 
 ```yaml
 - name: Checkout
-  uses: actions/checkout@v4
+  uses: actions/checkout@v6
   with:
     fetch-depth: 50
     fetch-tags: true
